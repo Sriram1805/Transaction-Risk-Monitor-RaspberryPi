@@ -1,4 +1,4 @@
-# PayGuard AI — Raspberry Pi Transaction Risk Monitor
+## An AI-assisted transaction risk monitoring prototype designed for Raspberry Pi. The system analyzes transaction amount, transaction timing, customer historical average, and transaction frequency to generate an explainable risk score and recommended action.
 
 ## Track
 AI Risk Manager
