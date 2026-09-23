@@ -1,0 +1,12 @@
+DEMO SCRIPT
+1. Open dashboard.
+2. Explain that PayGuard AI runs as a lightweight service on Raspberry Pi.
+3. Enter:
+   Amount = 48500
+   Hour = 2
+   Previous average = 1500
+   Transactions today = 8
+4. Click ANALYZE TRANSACTION.
+5. Show HIGH risk and the three reasons.
+6. Change amount to 1200, hour to 14, previous average to 1500, transactions today to 2.
+7. Click ANALYZE again and show LOW risk.

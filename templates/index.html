@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayGuard AI</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <div>
+            <h1>PayGuard AI</h1>
+            <p>Raspberry Pi Transaction Risk Monitor</p>
+        </div>
+        <div class="badge">AI RISK MANAGER</div>
+    </header>
+
+    <section class="stats">
+        <div class="card"><span>Transactions</span><b>1,250</b></div>
+        <div class="card"><span>High Risk</span><b>37</b></div>
+        <div class="card"><span>Medium Risk</span><b>124</b></div>
+        <div class="card"><span>Low Risk</span><b>1,089</b></div>
+    </section>
+
+    <section class="main-grid">
+        <div class="panel">
+            <h2>Analyze Transaction</h2>
+            <p class="muted">Enter transaction details to generate an explainable risk score.</p>
+
+            <label>Transaction Amount (₹)</label>
+            <input id="amount" type="number" value="48500">
+
+            <label>Transaction Hour (0–23)</label>
+            <input id="hour" type="number" min="0" max="23" value="2">
+
+            <label>Customer's Previous Average (₹)</label>
+            <input id="previous_avg" type="number" value="1500">
+
+            <label>Transactions Today</label>
+            <input id="transactions_today" type="number" value="8">
+
+            <button onclick="analyze()">ANALYZE TRANSACTION</button>
+        </div>
+
+        <div class="panel result">
+            <h2>AI Risk Result</h2>
+            <div id="empty">Click Analyze Transaction to generate the result.</div>
+            <div id="result" style="display:none">
+                <div class="score" id="score">0</div>
+                <div class="level" id="level">LOW</div>
+                <h3>Why was it flagged?</h3>
+                <ul id="reasons"></ul>
+                <div class="action" id="action"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        Prototype for Raspberry Pi • Explainable transaction risk monitoring
+    </footer>
+</div>
+
+<script>
+async function analyze() {
+    const payload = {
+        amount: document.getElementById("amount").value,
+        hour: document.getElementById("hour").value,
+        previous_avg: document.getElementById("previous_avg").value,
+        transactions_today: document.getElementById("transactions_today").value
+    };
+
+    const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    document.getElementById("empty").style.display = "none";
+    document.getElementById("result").style.display = "block";
+    document.getElementById("score").textContent = data.score + "/100";
+    document.getElementById("level").textContent = data.level;
+    document.getElementById("level").className = "level " + data.level.toLowerCase();
+
+    document.getElementById("reasons").innerHTML =
+        data.reasons.map(x => "<li>" + x + "</li>").join("");
+
+    document.getElementById("action").textContent = "Recommended action: " + data.action;
+}
+</script>
+</body>
+</html>
